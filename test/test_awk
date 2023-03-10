@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if awk -f ../css-to-json.awk input.css | jq | diff expected.json -
+then
+  echo ok
+else
+  echo failed && exit 1
+fi

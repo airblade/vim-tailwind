@@ -1,0 +1,32 @@
+.p-0 {
+  padding: 0px;
+}
+
+.p-0\.5 {
+  padding: 0.125rem;
+}
+
+.object-top {
+  -o-object-position: top;
+     object-position: top
+}
+
+.container {
+  width: 100%
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px
+  }
+}
+
+.font-serif {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif
+}
+
+.-space-x-44 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(-11rem * var(--tw-space-x-reverse));
+  margin-left: calc(-11rem * calc(1 - var(--tw-space-x-reverse)))
+}

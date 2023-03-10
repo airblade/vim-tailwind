@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Generate CSS with all Tailwind's classes.
+npx tailwindcss -i input.css 2>/dev/null | \
+
+# Convert the CSS to JSON.
+awk -f css-to-json.awk | \
+
+# Run it through jq to check the JSON is valid.
+# Write it to output.json.
+jq > output.json
