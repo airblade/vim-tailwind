@@ -1,11 +1,8 @@
 # vim-tailwind
 
-A Vim plugin for:
+A Vim plugin to autocomplete Tailwind class names without LSP.
 
-- autocompletion of Tailwind class names
-- quick lookup of Tailwind classes' CSS properties
-
-...without LSP.
+It also lets you look up a Tailwind class's CSS properties.
 
 
 ## Tailwind version
