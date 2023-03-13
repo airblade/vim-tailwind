@@ -1,10 +1,14 @@
+vim9script
+
 if exists('g:loaded_tailwind') || &cp
   finish
 endif
 
-let g:loaded_tailwind = 1
+g:loaded_tailwind = 1
 
-nnoremap <silent> <Plug>(tailwind-lookup) :call tailwind#lookup()<CR>
+import autoload 'tailwind.vim'
+
+nnoremap <silent> <Plug>(tailwind-lookup) :call tailwind#Lookup()<CR>
 
 if empty(maparg('K', 'n'))
   nmap <silent> <buffer> K <Plug>(tailwind-lookup)

@@ -25,13 +25,13 @@ Install like every other Vim plugin :)
 For user-defined autocompletion (via `<C-X><C-U>`):
 
 ```vim
-setlocal completefunc=tailwind#complete
+setlocal completefunc=tailwind#Complete
 ```
 
 Or for omnicompletion (via `<C-X><C-O>`):
 
 ```vim
-setlocal omnifunc=tailwind#complete
+setlocal omnifunc=tailwind#Complete
 ```
 
 I have the following snippet in my vimrc to set this up:
@@ -42,7 +42,7 @@ function! s:is_tailwind()
 endfunction
 
 autocmd BufEnter *.html,*.slim if s:is_tailwind() |
-      \   setlocal omnifunc=tailwind#complete |
+      \   setlocal omnifunc=tailwind#Complete |
       \ endif
 ```
 

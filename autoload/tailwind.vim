@@ -1,71 +1,74 @@
-" Key: (String) CSS (not Tailwind) class name
-" Value: (List) CSS properties
-let s:css = {}
-let s:initialised = 0
-let s:plugin_dir = expand('<sfile>:p:h:h')
-let s:separator  = !exists('+shellslash') || &shellslash ? '/' : '\'
+vim9script
+
+# Key: (String) CSS (not Tailwind) class name
+# Value: (List) CSS properties
+var css = {}
+var initialised = 0
+const plugin_dir = expand('<sfile>:p:h:h')
+const separator  = !exists('+shellslash') || &shellslash ? '/' : '\'
 
 
-function tailwind#lookup()
-  call s:init()
+export def Lookup()
+  Init()
 
-  let css_class = s:tailwind_to_css(s:tailwind_class_at_cursor())
-  if has_key(s:css, css_class)
-    " TODO popup
-    echom s:css[css_class]->join(' ')
+  var css_class = TailwindToCss(TailwindClassAtCursor())
+  if has_key(css, css_class)
+    # TODO popup
+    echom css[css_class]->join(' ')
   endif
-endfunction
+enddef
 
 
-function tailwind#complete(findstart, base)
-  call s:init()
+export def Complete(findstart: number, base: string): any
+  Init()
 
-  if a:findstart
-    let line = getline('.')
-    let start = col('.') - 1
+  if findstart
+    var line = getline('.')
+    var start = col('.') - 1
 
     while start > 0 && line[start - 1] =~ '[0-9A-Za-z._-]'
-      let start -= 1
+      start -= 1
     endwhile
 
     return start
-  end
+  endif
 
-  let matches = []
+  var matches = []
 
-  for css_class in keys(s:css)
-        \ ->filter({_, v -> stridx(s:css_to_tailwind(v), a:base) == 0})
-        \ ->sort('s:natural_sort')
-    call add(matches, {
-          \  'word': s:css_to_tailwind(css_class),
-          \  'info': join(s:css[css_class], "\n")
-          \ })
+  const css_prefix = TailwindToCss(base)
+  for css_class in keys(css)
+        ->filter((_, v) => stridx(v, css_prefix) == 0)
+        ->sort(NaturalSort)
+    add(matches, {
+      word: CssToTailwind(css_class),
+      info: css[css_class]->join("\n")
+    })
   endfor
 
   return matches
-endfunction
+enddef
 
 
-" Ignores any variants, e.g. sm: or hover:
-function s:tailwind_class_at_cursor()
+# Ignores any variants, e.g. sm: or hover:
+def TailwindClassAtCursor(): string
   return matchstr(expand('<cWORD>'), '\v[^"'':]+\ze(["''>])*$')
-endfunction
+enddef
 
-function s:css_to_tailwind(str)
-  return substitute(a:str, '\', '', 'g')
-endfunction
+def CssToTailwind(name: string): string
+  return substitute(name, '\', '', 'g')
+enddef
 
-function s:tailwind_to_css(str)
-  return escape(a:str, './')
-endfunction
+def TailwindToCss(name: string): string
+  return escape(name, './')
+enddef
 
-function s:natural_sort(a, b)
-  let chunks_a = s:chunks(a:a)
-  let chunks_b = s:chunks(a:b)
-  " Compare as many chunks as possible
-  " and return 1 or -1 if any are not equal.
+def NaturalSort(a: string, b: string): number
+  var chunks_a = Chunks(a)
+  var chunks_b = Chunks(b)
+  # Compare as many chunks as possible
+  # and return 1 or -1 if any are not equal.
   for i in range(min([len(chunks_a), len(chunks_b)]))
-    let [chunk_a, chunk_b] = [chunks_a[i], chunks_b[i]]
+    var [chunk_a, chunk_b] = [chunks_a[i], chunks_b[i]]
     if type(chunk_a) == type(chunk_b)
       if chunk_a <# chunk_b
         return -1
@@ -79,30 +82,49 @@ function s:natural_sort(a, b)
     endif
   endfor
 
-  " The chunks are identical so far.
-  " The key which has fewer chunks is the lesser one.
+  # The chunks are identical so far.
+  # The key which has fewer chunks is the lesser one.
   return len(chunks_a) - len(chunks_b)
-endfunction
+enddef
 
-" Split text into a list of strings and numbers.
-"
-" E.g. 'abc123def' -> ['abc', 123, 'def']
-function s:chunks(text)
-  let chunks = split(a:text, '\v(\D+|\d+)\zs')
-  let i = 0
-  for chunk in chunks
-    if chunk =~ '^\d\+$'
-      let chunks[i] = str2nr(chunk)
-    endif
-    let i += 1
-  endfor
-  return chunks
-endfunction
+# Split text into a list of strings and numbers.
+#
+# E.g. 'abc123def' -> ['abc', 123, 'def']
+def Chunks(text: string): list<any>
+  return split(text, '\v(\D+|\d+)\zs')
+        ->map((_, v) => v =~ '^\d\+$' ? str2nr(v) : v)
+enddef
 
-function s:init()
-  if s:initialised | return | endif
-  let s:css = readfile(s:plugin_dir.s:separator.'output.json')
-        \ ->join('')
-        \ ->json_decode()
-  let s:initialised = 1
-endfunction
+def Init()
+  if initialised | return | endif
+  css = readfile(plugin_dir .. separator .. 'output.json')
+        ->join('')
+        ->json_decode()
+  initialised = 1
+enddef
+
+
+# For some reason this errors when $TEST is not set
+# (which is in normal operation).
+#
+# if exists("$TEST")
+#   export def TailwindClassAtCursor__(): string
+#     return TailwindClassAtCursor()
+#   enddef
+
+#   export def NaturalSort__(a: string, b: string): number
+#     return NaturalSort(a, b)
+#   enddef
+
+#   export def Chunks__(text: string): list<any>
+#     return Chunks(text)
+#   enddef
+
+#   export def TailwindToCss__(name: string): string
+#     return TailwindToCss(name)
+#   enddef
+
+#   export def CssToTailwind__(name: string): string
+#     return CssToTailwind(name)
+#   enddef
+# endif
