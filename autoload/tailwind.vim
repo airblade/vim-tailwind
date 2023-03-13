@@ -38,10 +38,17 @@ export def Complete(findstart: number, base: string): any
   for name in keys(css)
         ->filter((_, v) => stridx(v, base) == 0)
         ->sort(NaturalSort)
-    add(matches, {
-      word: name,
-      info: css[name]->join("\n")
-    })
+    var item = { word: name }
+    if g:tailwind_complete_item_info
+      item.info = css[name]->join("\n")
+    endif
+    if g:tailwind_complete_item_menu
+      const property = css[name]->join()
+      item.menu = strwidth(property) > g:tailwind_complete_item_menu_length
+        ? property[ : g:tailwind_complete_item_menu_length - 3] .. '...'
+        : property
+    endif
+    add(matches, item)
   endfor
 
   return matches

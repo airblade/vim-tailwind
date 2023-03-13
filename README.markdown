@@ -15,6 +15,15 @@ v3.2.7
 Install like every other Vim plugin :)
 
 
+## Configuration
+
+These options customise the completion items (see `:help complete-items`).
+
+- `g:tailwind_complete_item_info` - whether to set the `info` text (default `v:true`).
+- `g:tailwind_complete_item_menu` - whether to set the `menu` text (default `v:true`).
+- `g:tailwind_complete_item_menu_length` - maximun length of the `menu` text (default `40`).
+
+
 ## Usage
 
 ### Autocompletion
