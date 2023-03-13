@@ -9,20 +9,6 @@ function TearDown()
 endfunction
 
 
-function TestCssToTailwind()
-  call assert_equal('foo',         s:tailwind.CssToTailwind__('foo'))
-  call assert_equal('p-2.5',       s:tailwind.CssToTailwind__('p-2\.5'))
-  call assert_equal('inset-y-3/5', s:tailwind.CssToTailwind__('inset-y-3\/5'))
-endfunction
-
-
-function Test_tailwind_to_css()
-  call assert_equal('foo',          s:tailwind.TailwindToCss__('foo'))
-  call assert_equal('p-2\.5',       s:tailwind.TailwindToCss__('p-2.5'))
-  call assert_equal('inset-y-3\/5', s:tailwind.TailwindToCss__('inset-y-3/5'))
-endfunction
-
-
 function Test_chunks()
   call assert_equal(['abc', 123, 'def'], s:tailwind.Chunks__('abc123def'))
 endfunction

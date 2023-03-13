@@ -1,9 +1,9 @@
 vim9script
 
-# Key: (String) CSS (not Tailwind) class name
-# Value: (List) CSS properties
-var css = {}
-var initialised = 0
+# Key: Tailwind class name
+# Value: CSS properties
+var css: dict<list<string>>
+var initialised: bool
 const plugin_dir = expand('<sfile>:p:h:h')
 const separator  = !exists('+shellslash') || &shellslash ? '/' : '\'
 
@@ -11,10 +11,10 @@ const separator  = !exists('+shellslash') || &shellslash ? '/' : '\'
 export def Lookup()
   Init()
 
-  var css_class = TailwindToCss(TailwindClassAtCursor())
-  if has_key(css, css_class)
+  var name = TailwindClassAtCursor()
+  if has_key(css, name)
     # TODO popup
-    echom css[css_class]->join(' ')
+    echom css[name]->join(' ')
   endif
 enddef
 
@@ -35,13 +35,12 @@ export def Complete(findstart: number, base: string): any
 
   var matches = []
 
-  const css_prefix = TailwindToCss(base)
-  for css_class in keys(css)
-        ->filter((_, v) => stridx(v, css_prefix) == 0)
+  for name in keys(css)
+        ->filter((_, v) => stridx(v, base) == 0)
         ->sort(NaturalSort)
     add(matches, {
-      word: CssToTailwind(css_class),
-      info: css[css_class]->join("\n")
+      word: name,
+      info: css[name]->join("\n")
     })
   endfor
 
@@ -52,14 +51,6 @@ enddef
 # Ignores any variants, e.g. sm: or hover:
 def TailwindClassAtCursor(): string
   return matchstr(expand('<cWORD>'), '\v[^"'':]+\ze(["''>])*$')
-enddef
-
-def CssToTailwind(name: string): string
-  return substitute(name, '\', '', 'g')
-enddef
-
-def TailwindToCss(name: string): string
-  return escape(name, './')
 enddef
 
 def NaturalSort(a: string, b: string): number
@@ -100,7 +91,7 @@ def Init()
   css = readfile(plugin_dir .. separator .. 'output.json')
         ->join('')
         ->json_decode()
-  initialised = 1
+  initialised = v:true
 enddef
 
 
@@ -118,13 +109,5 @@ enddef
 
 #   export def Chunks__(text: string): list<any>
 #     return Chunks(text)
-#   enddef
-
-#   export def TailwindToCss__(name: string): string
-#     return TailwindToCss(name)
-#   enddef
-
-#   export def CssToTailwind__(name: string): string
-#     return CssToTailwind(name)
 #   enddef
 # endif

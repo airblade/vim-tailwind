@@ -10,8 +10,8 @@ nested              { next }
 /{/   {
         # Remove leading `.` from class name
         sub(/^\./, "")
-        # Escape `\` in .inset-0\.5 etc
-        sub(/\\/, "\\\\")
+        # Remove `\` in .inset-0\.5 etc
+        sub(/\\/, "")
         # Remove any selectors and `{`
         # E.g. "p-0 {" -> "p-0"
         # E.g. "-space-x-44 > :not([hidden]) ~ :not([hidden]) {" -> "-space-x-44"
