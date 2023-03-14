@@ -44,7 +44,8 @@ I have the following snippet in my vimrc to set this up:
 
 ```vim
 function! s:is_tailwind()
-  return !empty(findfile('tailwind.config.js', '.;'))
+  return !empty(findfile('tailwind.config.js', '.;')) ||
+       \ !empty(findfile('config/tailwind.config.js', '.;'))
 endfunction
 
 autocmd BufEnter *.html,*.slim if s:is_tailwind() |
