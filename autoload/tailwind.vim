@@ -37,9 +37,15 @@ export def Complete(findstart: number, base: string): any
     return v:none
   endif
 
-  for name in keys(css)
+  var names = keys(css)
         ->filter((_, v) => stridx(v, base) == 0)
         ->sort(NaturalSort)
+
+  if names->len() > g:tailwind_complete_items_max
+    names = names[ : g:tailwind_complete_items_max - 1]
+  endif
+
+  return names->mapnew((_: number, name: string) => {
     var item = { word: name }
     if g:tailwind_complete_item_info
       item.info = css[name]->join("\n")
@@ -50,10 +56,8 @@ export def Complete(findstart: number, base: string): any
         ? property[ : g:tailwind_complete_item_menu_length - 3] .. '...'
         : property
     endif
-    add(matches, item)
-  endfor
-
-  return matches
+    return item
+  })
 enddef
 
 
