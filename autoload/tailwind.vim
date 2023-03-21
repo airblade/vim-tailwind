@@ -33,7 +33,9 @@ export def Complete(findstart: number, base: string): any
     return start
   endif
 
-  var matches = []
+  if empty(base)
+    return v:none
+  endif
 
   for name in keys(css)
         ->filter((_, v) => stridx(v, base) == 0)
