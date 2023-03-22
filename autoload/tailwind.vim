@@ -37,8 +37,7 @@ export def Complete(findstart: number, base: string): any
     return v:none
   endif
 
-  var names = keys(css)
-        ->filter((_, v) => stridx(v, base) == 0)
+  var names = keys(css)->filter((_, v) => stridx(v, base) == 0)
 
   if names->len() > g:tailwind_complete_items_max
     names = names[ : g:tailwind_complete_items_max - 1]
