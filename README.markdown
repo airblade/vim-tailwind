@@ -7,7 +7,7 @@ It also lets you look up a Tailwind class's CSS properties.
 
 ## Tailwind version
 
-v3.2.7
+v3.3
 
 
 ## Installation
