@@ -15,6 +15,7 @@ import autoload 'tailwind.vim'
 
 nnoremap <silent> <Plug>(tailwind-lookup) :call tailwind#Lookup()<CR>
 
-if empty(maparg('K', 'n'))
-  nmap <silent> <buffer> K <Plug>(tailwind-lookup)
-endif
+augroup tailwind
+  autocmd!
+  autocmd BufEnter * if empty(maparg('K', 'n')) | nmap <silent> <buffer> K <Plug>(tailwind-lookup)| endif
+augroup END
