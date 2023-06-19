@@ -5,6 +5,17 @@ A Vim plugin to autocomplete Tailwind class names without LSP.
 It also lets you look up a Tailwind class's CSS properties.
 
 
+## Screenshots
+
+Showing completions for `text-zinc-`:
+
+![Screenshot of completions for `text-zinc-`](completions.png?raw=true)
+
+Showing class information for `text-zinc-600` in the command-line area:
+
+![Screenshot of completions for `text-zinc-`](class-lookup.png?raw=true)
+
+
 ## Tailwind version
 
 v3.3
