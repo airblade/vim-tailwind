@@ -106,19 +106,19 @@ def Init()
 enddef
 
 
-# For some reason this errors when $TEST is not set
-# (which is in normal operation).
-#
-# if exists("$TEST")
-#   export def TailwindClassAtCursor__(): string
-#     return TailwindClassAtCursor()
-#   enddef
+# https://vi.stackexchange.com/a/42918/1643
+if has('patch-9.0.1806')
+  if exists("$TEST")
+    export def TailwindClassAtCursor__(): string
+      return TailwindClassAtCursor()
+    enddef
 
-#   export def NaturalSort__(a: string, b: string): number
-#     return NaturalSort(a, b)
-#   enddef
+    export def NaturalSort__(a: string, b: string): number
+      return NaturalSort(a, b)
+    enddef
 
-#   export def Chunks__(text: string): list<any>
-#     return Chunks(text)
-#   enddef
-# endif
+    export def Chunks__(text: string): list<any>
+      return Chunks(text)
+    enddef
+  endif
+endif
