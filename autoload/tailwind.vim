@@ -107,18 +107,8 @@ enddef
 
 
 # https://vi.stackexchange.com/a/42918/1643
-if has('patch-9.0.1806')
-  if exists("$TEST")
-    export def TailwindClassAtCursor__(): string
-      return TailwindClassAtCursor()
-    enddef
-
-    export def NaturalSort__(a: string, b: string): number
-      return NaturalSort(a, b)
-    enddef
-
-    export def Chunks__(text: string): list<any>
-      return Chunks(text)
-    enddef
-  endif
+if exists("$TEST")
+  export var TailwindClassAtCursor__ = funcref('TailwindClassAtCursor')
+  export var NaturalSort__ = funcref('NaturalSort')
+  export var Chunks__ = funcref('Chunks')
 endif
