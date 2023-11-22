@@ -18,7 +18,7 @@ Showing class information for `text-zinc-600` in the command-line area:
 
 ## Tailwind version
 
-v3.3
+v3.3.5
 
 
 ## Installation
